@@ -1,0 +1,9 @@
+api:
+  port: 4000
+  ssl:
+    enabled: false
+    cert:
+    key:
+
+log:
+  level: debug
