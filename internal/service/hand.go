@@ -5,7 +5,8 @@ import (
 	"strings"
 )
 
-func findResult(hand []string) string {
+// scoreHand scores the hand
+func scoreHand(hand []string) string {
 	if len(hand) != 5 {
 		return Hand_Nothing
 	}
@@ -102,12 +103,13 @@ func detectDupes(hand []string) (int, int, int, bool) {
 }
 
 type byCard []string
+
 func (s byCard) Len() int {
-    return len(s)
+	return len(s)
 }
 func (s byCard) Swap(i, j int) {
-    s[i], s[j] = s[j], s[i]
+	s[i], s[j] = s[j], s[i]
 }
 func (s byCard) Less(i, j int) bool {
-    return strings.IndexByte(allCards, s[i][0]) < strings.IndexByte(allCards, s[j][0])
+	return strings.IndexByte(allCards, s[i][0]) < strings.IndexByte(allCards, s[j][0])
 }

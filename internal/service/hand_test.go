@@ -5,7 +5,8 @@ import (
 	"testing"
 )
 
-func TestFindResult(t *testing.T) {
+// Table based test to ensure correct scoring of hands
+func TestScoreHand(t *testing.T) {
 	var tests = map[string]string{
 		"A♠ K♠ Q♠ J♠ T♠": Hand_RoyalFlush,
 		"J♦ T♦ A♦ Q♦ K♦": Hand_RoyalFlush,
@@ -25,7 +26,7 @@ func TestFindResult(t *testing.T) {
 		"T♠ T♦ 8♥ 9♠ 4♠": Hand_Nothing,
 	}
 	for h, exp := range tests {
-		res := findResult(strings.Split(h, " "))
+		res := scoreHand(strings.Split(h, " "))
 		if exp != res {
 			t.Log("Unexpected Result", h, res, "!=", exp)
 			t.Fail()

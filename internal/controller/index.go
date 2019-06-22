@@ -25,7 +25,7 @@ func (c index) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte(fmt.Sprintf("<p>Hand: %v</p>", hand)))
 
-	hand, res, balance := game.Exchange([]int{0,1,2})
+	hand, res, balance := game.Exchange([]int{0, 1, 2})
 
 	w.Write([]byte(fmt.Sprintf("<p>Final Hand: %v<br>Result: %v<br>Balance: %v", hand, res, balance)))
 
