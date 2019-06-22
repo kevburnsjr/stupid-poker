@@ -33,8 +33,8 @@ type deck [52]string
 // shuffle shuffles the deck in place
 func (d *deck) shuffle() {
 	r := rand.New(rand.NewSource(time.Now().Unix()))
-	for n := len(d); n > 0; n-- {
-		randIndex := r.Intn(n)
-		d[n-1], d[randIndex] = d[randIndex], d[n-1]
+	for n := 0; n < len(d); n++ {
+		randIndex := r.Intn(len(d))
+		d[n], d[randIndex] = d[randIndex], d[n]
 	}
 }

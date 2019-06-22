@@ -9,24 +9,28 @@ import (
 
 	"github.com/kevburnsjr/stupid-poker/internal/config"
 	"github.com/kevburnsjr/stupid-poker/internal/controller"
+	"github.com/kevburnsjr/stupid-poker/internal/service"
 )
 
 type Api struct {
-	config *config.Api
-	logger *logrus.Logger
-	server *http.Server
+	config    *config.Api
+	logger    *logrus.Logger
+	server    *http.Server
+	gameCache service.GameCache
 }
 
 func NewApi(cfg *config.Api) *Api {
 	return &Api{
 		config: cfg,
 		logger: newLogger(cfg.Log.Level),
+		gameCache: service.NewGameCache(),
 	}
 }
 
 func (app *Api) Start() {
 	cfg := app.config.Api
-	handler := controller.NewRouter(app.config, app.logger)
+
+	handler := controller.NewRouter(app.config, app.logger, app.gameCache)
 
 	app.server = &http.Server{
 		Handler: handler,

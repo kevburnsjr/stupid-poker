@@ -5,12 +5,12 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/kevburnsjr/stupid-poker/internal/config"
+	"github.com/kevburnsjr/stupid-poker/internal/service"
 )
 
-func NewRouter(cfg *config.Api, logger *logrus.Logger) *mux.Router {
+func NewRouter(cfg *config.Api, logger *logrus.Logger, cache service.GameCache) *mux.Router {
 	router := mux.NewRouter()
-
-	router.Handle("/", index{cfg, logger})
+	router.Handle("/", index{cfg, logger, cache})
 	router.NotFoundHandler = &static{"static"}
 
 	return router
