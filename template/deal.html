@@ -1,0 +1,96 @@
+<div class="rules">
+    <table border="0">
+        <tr>
+            <td>Royal Flush</td>
+            <td>1250</td>
+            <td>Straight</td>
+            <td>20</td>
+        </tr>
+        <tr>
+            <td>Straight Flush</td>
+            <td>250</td>
+            <td>Three of a Kind</td>
+            <td>15</td>
+        </tr>
+        <tr>
+            <td>Four of a Kind</td>
+            <td>100</td>
+            <td>Two Pair</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>Full House</td>
+            <td>35</td>
+            <td>Jacks or Higher</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>Flush</td>
+            <td>25</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</div>
+<div class="rules balance">
+    <table border="0">
+        <tr>
+            <td>Balance</td>
+            <td>{{.Balance}}</td>
+            <td>Anty</td>
+            <td>5</td>
+        </tr>
+    </table>
+</div>
+<form method="POST" class="std exchange" id="exchange">
+    <input type="hidden" name="action" value="exchange"/>
+    <fieldset class="submit">
+        <input type="submit" class="submit" id="exchange_submit" value="Exchange">
+    <h1>Choose cards to discard</h1>
+    </fieldset>
+    <fieldset class="cards">
+    {{range $idx, $card := .Hand}}
+        <label for="card_{{$idx}}" class="card">
+            <span class="card"><img src="/i/cards/{{$card}}.png"/></span><br>
+            <input id="card_{{$idx}}" type="checkbox" class="checkbox" value="{{$idx}}" name="cards">
+        </label>
+    {{end}}
+    </fieldset>
+</form>
+<script>
+var cards = document.querySelectorAll('label.card');
+for(i = 0; el = cards[i]; i++) {
+    el.onmousedown = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    el.onclick = (function(el){
+        return function(e) {
+            if (e.target.nodeName == "INPUT") {
+                el.classList.toggle("active");
+            }
+        }
+    })(el);
+}
+document.addEventListener("keydown", function(e) {
+    var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
+    if(key === "enter") {
+        document.getElementById("exchange_submit").click();
+    }
+    if(key === "1") {
+        document.getElementById("card_0").click();
+    }
+    if(key === "2") {
+        document.getElementById("card_1").click();
+    }
+    if(key === "3") {
+        document.getElementById("card_2").click();
+    }
+    if(key === "4") {
+        document.getElementById("card_3").click();
+    }
+    if(key === "5") {
+        document.getElementById("card_4").click();
+    }
+});
+</script>

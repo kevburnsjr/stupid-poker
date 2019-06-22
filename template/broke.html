@@ -1,0 +1,17 @@
+<form method="POST" class="std start">
+    <input type="hidden" name="action" value="start"/>
+    <fieldset>
+        <h1>You are broke.</h1>
+    </fieldset>
+    <fieldset class="submit">
+        <input type="submit" class="submit" id="start_submit" value="Start Over">
+    </fieldset>
+</form>
+<script>
+document.addEventListener("keydown", function(e) {
+    var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
+    if(key === "enter") {
+        document.getElementById("start_submit").click();
+    }
+});
+</script>

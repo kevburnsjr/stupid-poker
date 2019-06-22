@@ -1,0 +1,65 @@
+<div class="rules">
+    <table border="0">
+        <tr>
+            <td>Royal Flush</td>
+            <td>1250</td>
+            <td>Straight</td>
+            <td>20</td>
+        </tr>
+        <tr>
+            <td>Straight Flush</td>
+            <td>250</td>
+            <td>Three of a Kind</td>
+            <td>15</td>
+        </tr>
+        <tr>
+            <td>Four of a Kind</td>
+            <td>100</td>
+            <td>Two Pair</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>Full House</td>
+            <td>35</td>
+            <td>Jacks or Higher</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>Flush</td>
+            <td>25</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</div>
+<div class="rules balance">
+    <table border="0">
+        <tr>
+            <td>Balance</td>
+            <td>{{.Balance}}</td>
+            <td>Anty</td>
+            <td>5</td>
+        </tr>
+    </table>
+</div>
+<form method="GET" class="std deal" id="deal">
+    <fieldset class="submit">
+        <input type="submit" class="submit" id="deal_submit" value="Next Hand">
+        <h1><strong>{{.Result}}!</strong></h1>
+    </fieldset>
+    <fieldset class="cards">
+    {{range $idx, $card := .Hand}}
+        <label for="card_{{$idx}}">
+            <span class="card"><img src="/i/cards/{{$card}}.png"/></span>
+        </label>
+    {{end}}
+    </fieldset>
+</form>
+<script>
+document.addEventListener("keydown", function(e) {
+    var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
+    if(key === "enter") {
+        document.getElementById("deal_submit").click();
+    }
+});
+</script>

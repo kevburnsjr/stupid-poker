@@ -46,6 +46,9 @@ type Game interface {
 	// It returns the final hand, a string representation of the hand score and the new balance
 	Exchange([]int) ([]string, string, int)
 
+	// GetBalance returns balance
+	GetBalance() int
+
 	// GetHandUtf8 returns hand as utf-8 card runes
 	GetHandUtf8() []string
 }
@@ -98,8 +101,15 @@ func (g *game) Exchange(cards []int) ([]string, string, int) {
 	}
 	res := scoreHand(hand)
 	g.balance += payout[res]
+	if payout[res] > 0 {
+		g.balance += g.anty
+	}
 	g.state = stateReady
 	return hand, res, g.balance
+}
+
+func (g *game) GetBalance() int {
+	return g.balance
 }
 
 func (g *game) GetHandUtf8() []string {

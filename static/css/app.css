@@ -1,0 +1,26 @@
+span.card { font-size: 8em; color: #000; }
+span.card img { width: 100%; }
+
+form.std { width: auto; box-shadow: none; }
+form.std input.submit { float: right; }
+form.std input.checkbox { display: none; }
+form.std label { float: left; text-align: center; padding: 1%;  width: 18%; cursor: pointer; }
+form.std label.active { }
+form.std fieldset { border: none; clear: both; }
+form.std fieldset.submit { border: none; }
+
+label.active img { opacity: 0.2; }
+
+h1 { text-align: center; margin: 0 4em; }
+
+form.std.start { width: 100%; }
+form.std.start fieldset { float: none; text-align: center; }
+form.std.start fieldset input.submit { float: none; }
+
+form.std fieldset.cards { padding: 0 5%; }
+form.std.deal fieldset.cards { padding: 3% 10%; }
+
+.rules { background: #ccc; padding: 0.5em 0; font-size: 0.9em; }
+.rules.balance { background: #e9e9e9; padding: 0.5em 0; font-size: 0.9em; }
+.rules table { border: none; width: 100%; }
+.rules table td { padding: 0 1em; }
