@@ -49,13 +49,21 @@
     </fieldset>
     <fieldset class="cards">
     {{range $idx, $card := .Hand}}
-        <label for="card_{{$idx}}">
+        <label for="card_{{$idx}}" class="card">
             <span class="card"><img src="/i/cards/{{$card}}.png"/></span>
         </label>
     {{end}}
     </fieldset>
 </form>
 <script>
+var cards = document.querySelectorAll('label.card');
+for(i = 0; el = cards[i]; i++) {
+    el.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementById("deal_submit").click();
+    };
+}
 document.addEventListener("keydown", function(e) {
     var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
     if(key === "enter") {
