@@ -17,8 +17,8 @@ form.std.start { width: 100%; }
 form.std.start fieldset { float: none; text-align: center; }
 form.std.start fieldset input.submit { float: none; }
 
-form.std fieldset.cards { padding: 0 5%; }
-form.std.deal fieldset.cards { padding: 3% 10%; }
+form.std fieldset.cards { padding: 2% 10%; max-width: 900px; margin: 0 auto; }
+form.std.deal fieldset.cards { padding: 2% 10%; }
 
 .rules { background: #ccc; padding: 0.5em 0; font-size: 0.9em; }
 .rules.balance { background: #e9e9e9; padding: 0.5em 0; font-size: 0.9em; }
