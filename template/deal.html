@@ -44,9 +44,8 @@
 </div>
 <form method="POST" class="std exchange" id="exchange">
     <input type="hidden" name="action" value="exchange"/>
-    <fieldset class="submit">
-        <input type="submit" class="submit" id="exchange_submit" value="Exchange">
-    <h1>Choose cards to discard</h1>
+    <fieldset>
+        <h1>Choose cards to discard</h1>
     </fieldset>
     <fieldset class="cards">
     {{range $idx, $card := .Hand}}
@@ -55,6 +54,9 @@
             <input id="card_{{$idx}}" type="checkbox" class="checkbox" value="{{$idx}}" name="cards">
         </label>
     {{end}}
+    </fieldset>
+    <fieldset class="submit">
+        <input type="submit" class="submit" id="exchange_submit" value="Exchange">
     </fieldset>
 </form>
 <script>

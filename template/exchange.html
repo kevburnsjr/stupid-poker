@@ -43,8 +43,7 @@
     </table>
 </div>
 <form method="GET" class="std deal" id="deal">
-    <fieldset class="submit">
-        <input type="submit" class="submit" id="deal_submit" value="Next Hand">
+    <fieldset>
         <h1><strong>{{.Result}}!</strong></h1>
     </fieldset>
     <fieldset class="cards">
@@ -53,6 +52,9 @@
             <span class="card"><img src="/i/cards/{{$card}}.png"/></span>
         </label>
     {{end}}
+    </fieldset>
+    <fieldset class="submit">
+        <input type="submit" class="submit" id="deal_submit" value="Next Hand">
     </fieldset>
 </form>
 <script>
