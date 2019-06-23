@@ -1,12 +1,12 @@
 span.card img { width: 100%; }
 
 form.std { width: auto; box-shadow: none; }
-form.std input.submit { float: right; }
+form.std input.submit { float: right; line-height: 2.4em; border-radius: 0.3em; }
 form.std input.checkbox { display: none; }
 form.std label { float: left; text-align: center; padding: 1%;  width: 18%; cursor: pointer; }
 form.std label.active { }
 form.std fieldset { border: none; clear: both; max-width: 900px; margin: 0 auto; }
-form.std fieldset.submit { border: none; padding-top: 1em; }
+form.std fieldset.submit { border: none; padding-top: 1.5em; }
 
 label.active img { opacity: 0.2; }
 

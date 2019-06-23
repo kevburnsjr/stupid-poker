@@ -44,7 +44,7 @@
 </div>
 <form method="GET" class="std deal" id="deal">
     <fieldset>
-        <h1><strong>{{.Result}}!</strong></h1>
+        <h1><span class="result">{{.Result}}</span>!</h1>
     </fieldset>
     <fieldset class="cards">
     {{range $idx, $card := .Hand}}
@@ -54,7 +54,7 @@
     {{end}}
     </fieldset>
     <fieldset class="submit">
-        <input type="submit" class="submit" id="deal_submit" value="Next Hand">
+        <input type="submit" class="submit" id="deal_submit" value="Next Hand &gt;">
     </fieldset>
 </form>
 <script>
