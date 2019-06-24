@@ -1,4 +1,4 @@
-package service
+package poker
 
 import (
 	"github.com/hashicorp/golang-lru"

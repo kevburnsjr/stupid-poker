@@ -1,24 +1,22 @@
 package controller
 
 import (
+	"bytes"
 	"encoding/base64"
+	"html/template"
 	"math/rand"
 	"net/http"
-	"time"
-	"html/template"
-	"bytes"
 	"strconv"
+	"time"
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kevburnsjr/stupid-poker/internal/config"
-	"github.com/kevburnsjr/stupid-poker/internal/service"
+	"github.com/kevburnsjr/stupid-poker/internal/poker"
 )
 
 type index struct {
-	cfg      *config.Api
-	log      *logrus.Logger
-	gameCache service.GameCache
+	log       *logrus.Logger
+	gameCache poker.GameCache
 }
 
 func (c index) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -38,19 +36,17 @@ func (c index) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var page = "start"
-	var hand []string
-	var res string
+	var hand poker.Hand
 	var balance int
 
 	game := c.gameCache.Get(hash)
 
 	deal := func() {
 		page = "deal"
-		hand, err = game.Deal()
+		hand, balance, err = game.Deal()
 		if err != nil {
 			page = "broke"
 		}
-		balance = game.GetBalance()
 	}
 
 	if r.Method == "GET" {
@@ -60,10 +56,10 @@ func (c index) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			deal()
 		}
 	} else {
-		switch r.FormValue("action"){
+		switch r.FormValue("action") {
 		case "start":
-			if game == nil || game.GetBalance() < 1 {
-				game = service.NewGame(5, 200)
+			if game == nil || balance < 1 {
+				game = poker.NewGame(5, 200)
 				c.gameCache.Set(hash, game)
 			}
 			deal()
@@ -82,22 +78,22 @@ func (c index) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 				c.log.Debug("Exchanging cards ", idx)
-				hand, res, balance = game.Exchange(idx)
+				hand, balance = game.Exchange(idx)
 			}
 		}
 	}
 
-	pageTpl, err := template.ParseFiles("template/"+page+".html")
+	pageTpl, err := template.ParseFiles("template/" + page + ".html")
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
 	}
 	b1 := &bytes.Buffer{}
-	err = pageTpl.Execute(b1, struct{
-		Hand []string
-		Result string
+	err = pageTpl.Execute(b1, struct {
+		Hand    poker.Hand
+		Result  string
 		Balance int
-	}{hand, res, balance})
+	}{hand, hand.Score(), balance})
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -109,7 +105,7 @@ func (c index) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	b := &bytes.Buffer{}
-	err = layoutTpl.Execute(b, struct{Page template.HTML}{template.HTML(string(b1.Bytes()))})
+	err = layoutTpl.Execute(b, struct{ Page template.HTML }{template.HTML(string(b1.Bytes()))})
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -121,9 +117,8 @@ func (c index) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func randStr(len int) string {
-    buff := make([]byte, len)
-    rand.Read(buff)
-    str := base64.StdEncoding.EncodeToString(buff)
-    return str[:len]
+	buff := make([]byte, len)
+	rand.Read(buff)
+	str := base64.StdEncoding.EncodeToString(buff)
+	return str[:len]
 }
-

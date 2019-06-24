@@ -1,7 +1,6 @@
-package service
+package poker
 
 import (
-	"strings"
 	"errors"
 	"sync"
 )
@@ -9,17 +8,6 @@ import (
 const (
 	stateReady = iota
 	stateDealt
-
-	Hand_RoyalFlush    = "Royal Flush"
-	Hand_StraightFlush = "Straight Flush"
-	Hand_Quads         = "Four of a Kind"
-	Hand_FullHouse     = "Full House"
-	Hand_Flush         = "Flush"
-	Hand_Straight      = "Straight"
-	Hand_Trips         = "Three of a Kind"
-	Hand_TwoPair       = "Two Pair"
-	Hand_Jacks         = "Jacks or Higher"
-	Hand_Nothing       = "Nothing"
 )
 
 var payout = map[string]int{
@@ -39,18 +27,12 @@ var ErrNoBalance = errors.New("You are broke")
 
 type Game interface {
 	// Deal initializes the game, returning the player's initial hand
-	Deal() ([]string, error)
+	Deal() (Hand, int, error)
 
 	// Exchange accepts a slice of integers corresponding to indicies for cards in the given hand
 	// It discards those cards from the hand and replaces them with new cards from the deck
-	// It returns the final hand, a string representation of the hand score and the new balance
-	Exchange([]int) ([]string, string, int)
-
-	// GetBalance returns balance
-	GetBalance() int
-
-	// GetHandUtf8 returns hand as utf-8 card runes
-	GetHandUtf8() []string
+	// It returns the final hand and the new balance
+	Exchange([]int) (Hand, int)
 }
 
 func NewGame(anty int, balance int) Game {
@@ -68,29 +50,28 @@ type game struct {
 	state   int
 	anty    int
 	balance int
-	hand    []string
+	hand    Hand
 	mutex   *sync.Mutex
 }
 
-func (g *game) Deal() ([]string, error) {
+func (g *game) Deal() (Hand, int, error) {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
 	if g.balance < g.anty {
-		return nil, ErrNoBalance
+		return Hand{}, g.balance, ErrNoBalance
 	}
 	g.deck.shuffle()
 	g.balance -= g.anty
-	g.hand = append([]string(nil), g.deck[0:5]...)
+	g.hand = newHand(g.deck[0:5])
 	g.state = stateDealt
-	return g.hand, nil
+	return g.hand, g.balance, nil
 }
 
-func (g *game) Exchange(cards []int) ([]string, string, int) {
+func (g *game) Exchange(cards []int) (Hand, int) {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
 	if g.state != stateDealt {
-		res := scoreHand(g.hand)
-		return g.hand, res, g.balance
+		return g.hand, g.balance
 	}
 	hand := g.hand
 	for i, n := range cards {
@@ -99,27 +80,11 @@ func (g *game) Exchange(cards []int) ([]string, string, int) {
 		}
 		hand[n] = g.deck[i+5]
 	}
-	res := scoreHand(hand)
+	res := hand.Score()
 	g.balance += payout[res]
 	if payout[res] > 0 {
 		g.balance += g.anty
 	}
 	g.state = stateReady
-	return hand, res, g.balance
-}
-
-func (g *game) GetBalance() int {
-	return g.balance
-}
-
-func (g *game) GetHandUtf8() []string {
-	g.mutex.Lock()
-	defer g.mutex.Unlock()
-	cards := make([]string, 5)
-	for i, c := range g.hand {
-		card := strings.IndexByte(allCards, c[0])
-		suit := string([]rune(c)[1])
-		cards[i] = string([]rune(utf8deck[suit])[card])
-	}
-	return cards
+	return hand, g.balance
 }

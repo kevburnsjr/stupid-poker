@@ -1,6 +1,6 @@
 package config
 
-type Api struct {
+type App struct {
 	Api Http `yaml:"api"`
 	Log Log  `yaml:"log"`
 }

@@ -9,28 +9,28 @@ import (
 
 	"github.com/kevburnsjr/stupid-poker/internal/config"
 	"github.com/kevburnsjr/stupid-poker/internal/controller"
-	"github.com/kevburnsjr/stupid-poker/internal/service"
+	"github.com/kevburnsjr/stupid-poker/internal/poker"
 )
 
-type Api struct {
-	config    *config.Api
+type App struct {
+	config    *config.App
 	logger    *logrus.Logger
 	server    *http.Server
-	gameCache service.GameCache
+	gameCache poker.GameCache
 }
 
-func NewApi(cfg *config.Api) *Api {
-	return &Api{
-		config: cfg,
-		logger: newLogger(cfg.Log.Level),
-		gameCache: service.NewGameCache(),
+func NewApp(cfg *config.App) *App {
+	return &App{
+		config:    cfg,
+		logger:    newLogger(cfg.Log.Level),
+		gameCache: poker.NewGameCache(),
 	}
 }
 
-func (app *Api) Start() {
+func (app *App) Start() {
 	cfg := app.config.Api
 
-	handler := controller.NewRouter(app.config, app.logger, app.gameCache)
+	handler := controller.NewRouter(app.logger, app.gameCache)
 
 	app.server = &http.Server{
 		Handler: handler,
@@ -38,7 +38,7 @@ func (app *Api) Start() {
 	}
 	go func() {
 		var err error
-		app.logger.Printf("Api Listening on port %s", cfg.Port)
+		app.logger.Printf("App Listening on port %s", cfg.Port)
 		if cfg.Ssl.Enabled {
 			err = app.server.ListenAndServeTLS(cfg.Ssl.Cert, cfg.Ssl.Key)
 		} else {
@@ -50,7 +50,7 @@ func (app *Api) Start() {
 	}()
 }
 
-func (app *Api) Stop(timeout time.Duration) {
+func (app *App) Stop(timeout time.Duration) {
 	app.logger.Printf("Stopping HTTP Listener")
 	ctx, _ := context.WithTimeout(context.Background(), timeout)
 	app.server.Shutdown(ctx)

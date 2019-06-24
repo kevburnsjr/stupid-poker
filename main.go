@@ -22,10 +22,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Config file not found - %s", *config_path)
 	}
-	var cfg = config.Api{}
+	var cfg = config.App{}
 	yaml.Unmarshal(yamlFile, &cfg)
 
-	var app = internal.NewApi(&cfg)
+	var app = internal.NewApp(&cfg)
 
 	log.Println("Starting api")
 	app.Start()

@@ -1,4 +1,4 @@
-package service
+package poker
 
 import (
 	"strings"
@@ -25,8 +25,9 @@ func TestScoreHand(t *testing.T) {
 		"JS JD 8H 9S 4S": Hand_Jacks,
 		"TS TD 8H 9S 4S": Hand_Nothing,
 	}
-	for h, exp := range tests {
-		res := scoreHand(strings.Split(h, " "))
+	for c, exp := range tests {
+		h := newHand(strings.Split(c, " "))
+		res := h.Score()
 		if exp != res {
 			t.Log("Unexpected Result", h, res, "!=", exp)
 			t.Fail()
